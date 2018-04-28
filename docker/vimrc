@@ -156,7 +156,7 @@ map Y y$
 " next search
 nnoremap <C-L> :nohl<CR><C-L>
  
-
+set t_Co=256
 "------------------------------------------------------------
 " Specify a directory for plugins
 " - For Neovim: ~/.local/share/nvim/plugged
@@ -168,23 +168,13 @@ call plug#begin('~/.vim/plugged')
 " Shorthand notation; fetches https://github.com/junegunn/vim-easy-align
 Plug 'junegunn/vim-easy-align'
 
-" Any valid git URL is allowed
-Plug 'https://github.com/junegunn/vim-github-dashboard.git'
-
 " Multiple Plug commands can be written in a single line using | separators
 Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets'
 
 " On-demand loading
 Plug 'scrooloose/nerdtree', { 'on':  'NERDTreeToggle' }
-Plug 'tpope/vim-fireplace', { 'for': 'clojure' }
 
-" Plugin outside ~/.vim/plugged with post-update hook
-Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
-
-" Unmanaged plugin (manually installed and updated)
-Plug '~/my-prototype-plugin'
-
-Plug 'neovimhaskell/haskell-vim'
+Plug 'jpalardy/vim-slime'
 
 Plug 'tomasr/molokai'
 
@@ -196,38 +186,33 @@ Plug 'kien/ctrlp.vim'
 
 Plug 'bling/vim-airline'
 
-if has('nvim')
-  Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-else
-  Plug 'Shougo/deoplete.nvim'
-  Plug 'roxma/nvim-yarp'
-  Plug 'roxma/vim-hug-neovim-rpc'
-endif
+" Deoplete
+Plug 'Shougo/deoplete.nvim'
+Plug 'roxma/nvim-yarp'
+Plug 'roxma/vim-hug-neovim-rpc'
+
+Plug 'neovimhaskell/haskell-vim'
 
 Plug 'eagletmt/neco-ghc'
 
 " Initialize plugin system
 call plug#end()
 
-" Configuration of plugins
-if ! has('gui_running')
-    set ttimeoutlen=10
-    augroup FastEscape
-        autocmd!
-        au InsertEnter * set timeoutlen=0
-        au InsertLeave * set timeoutlen=1000
-    augroup END
-endif
+try
+    colorscheme molokai
+    let g:molokai_original = 1
+    let g:rehash256 = 1
+catch /^Vim\%((\a\+)\)\=:E185/
+    colorscheme desert
+endtry
 
 let g:deoplete#enable_at_startup = 1
+" deoplete tab-complete
+inoremap <expr><tab> pumvisible() ? "\<c-n>" : "\<tab>"
 
 " Disable haskell-vim omnifunc
 let g:haskellmode_completion_ghc = 0
 autocmd FileType haskell setlocal omnifunc=necoghc#omnifunc
-
-colorscheme molokai
-let g:molokai_original = 1
-let g:rehash256 = 1
 
 " Trigger configuration. Do not use <tab> if you use https://github.com/Valloric/YouCompleteMe.
 let g:UltiSnipsExpandTrigger="<c-l>"
@@ -235,3 +220,5 @@ let g:UltiSnipsJumpForwardTrigger="<c-b>"
 let g:UltiSnipsJumpBackwardTrigger="<c-z>"
 " If you want :UltiSnipsEdit to split your window.
 let g:UltiSnipsEditSplit="vertical"
+
+let g:slime_target = "vimterminal"
