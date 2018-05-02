@@ -26,7 +26,7 @@ RUN ./configure --with-features=huge \
 			--prefix=/usr/local && \
     make VIMRUNTIMEDIR=/usr/local/share/vim/vim80 &&\
     make install && \
-    rm -rf /vim
+    rm -rf /tmp/vim
 
 # Install Python 3 binding 
 RUN curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py && \
