@@ -1,19 +1,25 @@
 FROM haskell:8.0.1
 
 # Vim
+ARG VIM_VERSION=8.1.0042
+
 # Dependencies
 RUN apt-get update && \
     apt-get install -yq \
         libncurses5-dev libgnome2-dev libgnomeui-dev \
         libgtk2.0-dev libatk1.0-dev libbonoboui2-dev \
         libcairo2-dev libx11-dev libxpm-dev libxt-dev \
-        python3-dev ruby-dev lua5.1 lua5.1-dev libperl-dev git curl less && \
+        python3-dev ruby-dev lua5.1 lua5.1-dev libperl-dev \
+        git curl less && \
     rm -rf /var/lib/apt/lists/*
 
 # Build from source
 WORKDIR /tmp
-RUN git clone --single-branch --depth 1 https://github.com/vim/vim.git
-WORKDIR /tmp/vim
+RUN curl -L https://github.com/vim/vim/archive/v${VIM_VERSION}.tar.gz \
+        --output vim-${VIM_VERSION}.tar.gz \
+    && tar xvf vim-${VIM_VERSION}.tar.gz \
+    && rm vim-${VIM_VERSION}.tar.gz
+WORKDIR /tmp/vim-${VIM_VERSION}
 RUN ./configure --with-features=huge \
 			--enable-multibyte \
 			--enable-rubyinterp=yes \
@@ -24,9 +30,8 @@ RUN ./configure --with-features=huge \
 			--enable-gui=gtk2 \
 			--enable-cscope \
 			--prefix=/usr/local && \
-    make VIMRUNTIMEDIR=/usr/local/share/vim/vim80 &&\
     make install && \
-    rm -rf /tmp/vim
+    rm -rf /tmp/vim-${VIM_VERSION}
 
 # Install Python 3 binding 
 RUN curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py && \
