@@ -10,7 +10,7 @@ RUN apt-get update && \
         libgtk2.0-dev libatk1.0-dev libbonoboui2-dev \
         libcairo2-dev libx11-dev libxpm-dev libxt-dev \
         python3-dev ruby-dev lua5.1 lua5.1-dev libperl-dev \
-        git curl less && \
+        git curl less tmux && \
     rm -rf /var/lib/apt/lists/*
 
 # Build from source
