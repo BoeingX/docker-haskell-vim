@@ -162,39 +162,22 @@ set t_Co=256
 " - For Neovim: ~/.local/share/nvim/plugged
 " - Avoid using standard Vim directory names like 'plugin'
 call plug#begin('~/.vim/plugged')
-
-" Make sure you use single quotes
-
-" Shorthand notation; fetches https://github.com/junegunn/vim-easy-align
 Plug 'junegunn/vim-easy-align'
-
-" Multiple Plug commands can be written in a single line using | separators
-Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets'
-
-" On-demand loading
-Plug 'scrooloose/nerdtree', { 'on':  'NERDTreeToggle' }
-
+Plug 'SirVer/ultisnips'
+Plug 'honza/vim-snippets'
+Plug 'scrooloose/nerdtree'
 Plug 'jpalardy/vim-slime'
-
 Plug 'tomasr/molokai'
-
 Plug 'tpope/vim-surround'
-
-Plug 'scrooloose/syntastic'
-
+Plug 'w0rp/ale'
 Plug 'kien/ctrlp.vim'
-
 Plug 'bling/vim-airline'
-
 " Deoplete
 Plug 'Shougo/deoplete.nvim'
 Plug 'roxma/nvim-yarp'
 Plug 'roxma/vim-hug-neovim-rpc'
-
 Plug 'neovimhaskell/haskell-vim'
-
 Plug 'eagletmt/neco-ghc'
-
 " Initialize plugin system
 call plug#end()
 
@@ -222,3 +205,5 @@ let g:UltiSnipsJumpBackwardTrigger="<c-z>"
 let g:UltiSnipsEditSplit="vertical"
 
 let g:slime_target = "vimterminal"
+
+map <C-n> :NERDTreeToggle<CR>
