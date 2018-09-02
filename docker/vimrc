@@ -162,13 +162,8 @@ set t_Co=256
 " - For Neovim: ~/.local/share/nvim/plugged
 " - Avoid using standard Vim directory names like 'plugin'
 call plug#begin('~/.vim/plugged')
-Plug 'junegunn/vim-easy-align'
-Plug 'SirVer/ultisnips'
-Plug 'honza/vim-snippets'
 Plug 'scrooloose/nerdtree'
-Plug 'jpalardy/vim-slime'
 Plug 'tomasr/molokai'
-Plug 'tpope/vim-surround'
 Plug 'w0rp/ale'
 Plug 'kien/ctrlp.vim'
 Plug 'bling/vim-airline'
@@ -177,7 +172,10 @@ Plug 'Shougo/deoplete.nvim'
 Plug 'roxma/nvim-yarp'
 Plug 'roxma/vim-hug-neovim-rpc'
 Plug 'neovimhaskell/haskell-vim'
-Plug 'eagletmt/neco-ghc'
+Plug 'autozimu/LanguageClient-neovim', {
+    \ 'branch': 'next',
+    \ 'do': './install.sh'
+    \ }
 " Initialize plugin system
 call plug#end()
 
@@ -189,21 +187,24 @@ catch /^Vim\%((\a\+)\)\=:E185/
     colorscheme desert
 endtry
 
+map <C-n> :NERDTreeToggle<CR>
+
 let g:deoplete#enable_at_startup = 1
 " deoplete tab-complete
 inoremap <expr><tab> pumvisible() ? "\<c-n>" : "\<tab>"
 
-" Disable haskell-vim omnifunc
-let g:haskellmode_completion_ghc = 0
-autocmd FileType haskell setlocal omnifunc=necoghc#omnifunc
+let g:LanguageClient_serverCommands = {
+    \ 'haskell': ['hie-wrapper'],
+    \ }
 
-" Trigger configuration. Do not use <tab> if you use https://github.com/Valloric/YouCompleteMe.
-let g:UltiSnipsExpandTrigger="<c-l>"
-let g:UltiSnipsJumpForwardTrigger="<c-b>"
-let g:UltiSnipsJumpBackwardTrigger="<c-z>"
-" If you want :UltiSnipsEdit to split your window.
-let g:UltiSnipsEditSplit="vertical"
+nnoremap <silent> K :call LanguageClient#textDocument_hover()<CR>
+nnoremap <silent> gd :call LanguageClient#textDocument_definition()<CR>
+nnoremap <silent> <F2> :call LanguageClient#textDocument_rename()<CR>
 
-let g:slime_target = "vimterminal"
-
-map <C-n> :NERDTreeToggle<CR>
+let g:haskell_enable_quantification = 1   " to enable highlighting of `forall`
+let g:haskell_enable_recursivedo = 1      " to enable highlighting of `mdo` and `rec`
+let g:haskell_enable_arrowsyntax = 1      " to enable highlighting of `proc`
+let g:haskell_enable_pattern_synonyms = 1 " to enable highlighting of `pattern`
+let g:haskell_enable_typeroles = 1        " to enable highlighting of type roles
+let g:haskell_enable_static_pointers = 1  " to enable highlighting of `static`
+let g:haskell_backpack = 1                " to enable highlighting of backpack keywords
