@@ -6,12 +6,4 @@ jobs:
   include:
     - stage: build docker image
       script:
-      - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
-      - cd docker/
-      - docker build -t haskell-vim .
-      - docker images
-      - docker tag haskell-vim $DOCKER_USERNAME/haskell-vim
-      - docker push $DOCKER_USERNAME/haskell-vim
-    - stage: test
-      script: 
-      - docker run --rm $DOCKER_USERNAME/haskell-vim vim --help
+          - ./scripts/build-image.sh
