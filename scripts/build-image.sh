@@ -1,5 +1,5 @@
 #!/bin/bash
-set -ev
+set -e
 target=docker/
 image=haskell-vim
 if [[ $(git --no-pager diff HEAD~1..HEAD "$target") ]]; then
