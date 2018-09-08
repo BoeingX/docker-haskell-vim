@@ -16,7 +16,8 @@ RUN useradd -m -s /bin/bash -N -u $UID $USER && \
 
 # Haskell IDE engine
 RUN apt-get update && \
-    apt-get install git
+    apt-get install -yq git \
+                        exuberant-ctags
 
 USER $USER
 WORKDIR /tmp
@@ -26,8 +27,9 @@ RUN git clone https://github.com/haskell/haskell-ide-engine --recursive
 RUN stack config set system-ghc --global true
 
 WORKDIR /tmp/haskell-ide-engine
-RUN stack build
+RUN stack install
 ENV PATH=$HOME/.local/bin:$PATH
+
 USER root
 
 # Vim
@@ -82,13 +84,14 @@ RUN stack install hspec
 
 # Clean up
 USER root
-RUN rm -rf /var/lib/apt/lists/*
+RUN rm -rf /var/lib/apt/lists/* \
+    && rm -rf $HOME/.stack/
 
 # Final fix of permission
-RUN fix-permissions $HOME
+RUN mkdir -p $HOME/workspace && fix-permissions $HOME
 
 USER $USER
 
-WORKDIR /workspace
+WORKDIR $HOME/workspace
 
 CMD ["/bin/bash"]

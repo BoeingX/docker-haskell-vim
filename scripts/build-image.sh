@@ -1,17 +1,9 @@
 #!/bin/bash
-set -e
-target=docker/
-image=haskell-vim
-if [[ $(git --no-pager diff HEAD~1..HEAD "$target") ]]; then
-    echo "Changes detected in $target"
-    echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
-    cd docker
-    echo "Build docker image"
-    docker build -t "$image" .
-    echo "Tag image"
-    docker tag haskell-vim "$DOCKER_USERNAME/$image"
-    echo "Push to docker hub"
-    docker push "$DOCKER_USERNAME/$image"
+#
+# Build docker image only if TARGET_DIR changes from the last commit
+if [[ $(git --no-pager diff HEAD~1..HEAD "$TARGET_DIR") ]]; then
+    echo "Changes detected in $TARGET_DIR"
+    cd docker && docker build -t "${IMAGE_NAME}" .
 else
-    echo "No file changed in ${target}, skip build"
+    echo "No file changed in ${TARGET_DIR}, skip build"
 fi

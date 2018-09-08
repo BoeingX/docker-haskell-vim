@@ -1,9 +1,31 @@
 sudo: required
+
 dist: trusty
+
 notifications:
   email: false
-jobs:
-  include:
-    - stage: build docker image
-      script:
-          - ./scripts/build-image.sh
+
+env:
+  global:
+    - IMAGE_NAME=boeingx/haskell-vim
+    - TARGET_DIR=docker/
+
+before_script: 
+  - version="$(fgrep 'FROM haskell' docker/Dockerfile | cut -d':' -f2)"
+
+script:
+  - ./scripts/build-image.sh
+
+after_script:
+  - docker images
+
+before_deploy:
+    - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+    - docker tag "$IMAGE_NAME" "${IMAGE_NAME}:latest"
+    - docker tag "$IMAGE_NAME" "${IMAGE_NAME}:${version}"
+
+deploy:
+  provider: script
+  script: docker push "${IMAGE_NAME}:latest" && docker push "${IMAGE_NAME}:${version}"
+  on:
+    branch: master

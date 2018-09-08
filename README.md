@@ -47,13 +47,17 @@ docker run -it --rm -v <local/path/to/workdir/>:/workspace boeingx/haskell-vim b
 
 # Screenshots
 
-## Code completion
+## Built-in terminal
 
-![helloworld](./docs/screenshots/helloworld.gif)
+![terminal](./docs/screenshots/built-in-terminal.gif)
 
-## Terminal emulator
+## Autocompletion
 
-![terminal](./docs/screenshots/factorial.gif)
+![autocompletion](./docs/screenshots/autocompletion.gif)
+
+## Show documentation, goto definition and rename
+
+![hover](./docs/screenshots/hover-definition-rename.gif)
 
 # Troubleshooting
 
